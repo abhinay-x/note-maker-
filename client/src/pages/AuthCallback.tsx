@@ -34,7 +34,7 @@ const AuthCallback: React.FC = () => {
       // Save user if present
       if (userB64) {
         try {
-          const userJson = Buffer.from(userB64, 'base64').toString('utf-8');
+          const userJson = atob(userB64);
           const user = JSON.parse(userJson);
           localStorage.setItem('user_data', JSON.stringify(user));
         } catch (_) {
