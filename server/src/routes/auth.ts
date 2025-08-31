@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { AuthController } from '../controllers/authController';
+import { GoogleController } from '../controllers/googleController';
 import { validateSignup, validateLogin, validateOTP, validateForgotPassword, validateResetPassword } from '../middleware/validation';
 import { authLimiter, otpLimiter } from '../middleware/rateLimiter';
 
@@ -11,6 +12,10 @@ router.post('/verify-otp', otpLimiter, validateOTP, AuthController.verifyOTP);
 
 // Login routes
 router.post('/login/email', authLimiter, validateLogin, AuthController.loginEmail);
+
+// Google OAuth routes
+router.get('/google', GoogleController.startOAuth);
+router.get('/google/callback', GoogleController.handleCallback);
 
 // Token management
 router.post('/refresh', AuthController.refreshToken);
