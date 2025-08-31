@@ -159,6 +159,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSwitchToSignup, onForgotPasswor
           variant="google"
           className="w-full mt-4"
           size="lg"
+          onClick={() => {
+            const apiBase = (import.meta as any)?.env?.VITE_API_BASE || 'http://localhost:5000/api';
+            const serverBase = apiBase.replace(/\/?api\/?$/, '');
+            // Redirect to backend to start Google OAuth flow
+            window.location.href = `${serverBase}/api/auth/google`;
+          }}
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
