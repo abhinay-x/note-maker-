@@ -116,9 +116,18 @@ export class GoogleController {
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       });
 
-      // Redirect back to client; pass tokens via URL fragment
+      // Build minimal user payload for the client
+      const userPayload = {
+        _id: user._id.toString(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        isEmailVerified: true,
+      };
+
+      // Redirect back to client; pass tokens and user via URL fragment
       const clientUrl = getClientUrl();
-      const redirect = `${clientUrl}/auth/callback#access=${encodeURIComponent(tokens.accessToken)}&refresh=${encodeURIComponent(tokens.refreshToken)}`;
+      const redirect = `${clientUrl}/auth/callback#access=${encodeURIComponent(tokens.accessToken)}&refresh=${encodeURIComponent(tokens.refreshToken)}&user=${encodeURIComponent(Buffer.from(JSON.stringify(userPayload)).toString('base64'))}`;
       res.redirect(redirect);
     } catch (e) {
       console.error('Google callback error:', e);
