@@ -20,7 +20,7 @@ class ApiService {
 
   constructor() {
     this.api = axios.create({
-      baseURL: 'http://localhost:5000/api',
+      baseURL: (import.meta as any)?.env?.VITE_API_BASE || 'http://localhost:5000/api',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +99,8 @@ class ApiService {
       throw new Error('No refresh token available');
     }
 
-    const response = await axios.post('/api/auth/refresh', {
+    // Use the same axios instance so baseURL is respected in production
+    const response = await this.api.post('/auth/refresh', {
       refreshToken: this.tokens.refreshToken,
     });
 
